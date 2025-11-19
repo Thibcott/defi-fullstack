@@ -35,7 +35,7 @@ class TripController extends AbstractController
     public function list(TripService $tripService): JsonResponse
     {
         $trips = array_map(
-            fn ($trip) => $trip->toArray(),
+            fn($trip) => $trip->toArray(),
             $tripService->getTrips()
         );
 
