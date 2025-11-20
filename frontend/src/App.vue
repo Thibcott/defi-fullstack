@@ -91,7 +91,7 @@ async function loadStats() {
     <!-- Création de trajet -->
     <section style="margin-top: 1.5rem;">
       <h2>Créer un trajet</h2>
-     
+
       <form
         @submit.prevent="createTrip"
         style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;"
@@ -157,7 +157,6 @@ async function loadStats() {
     <!-- Statistiques -->
     <section style="margin-top: 2rem;">
       <h2>Statistiques par code analytique</h2>
-
 
       <button
         @click="loadStats"

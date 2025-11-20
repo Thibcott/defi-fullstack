@@ -5,8 +5,8 @@ namespace App\Domain\Model;
 class Trip
 {
     public function __construct(
-        public string $fromCode,
-        public string $toCode,
+        public string $from,
+        public string $to,
         public string $analyticCode,
         public float $distance,
         public \DateTimeImmutable $createdAt = new \DateTimeImmutable()
@@ -15,8 +15,8 @@ class Trip
     public function toArray(): array
     {
         return [
-            'from' => $this->fromCode,
-            'to' => $this->toCode,
+            'from' => $this->from,
+            'to' => $this->to,
             'analyticCode' => $this->analyticCode,
             'distance' => $this->distance,
             'createdAt' => $this->createdAt->format(DATE_ATOM),

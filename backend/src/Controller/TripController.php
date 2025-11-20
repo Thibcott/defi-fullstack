@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Application\Service\TripService;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +23,23 @@ class TripController extends AbstractController
             );
         }
 
-        $trip = $tripService->createTrip(
-            $data['from'],
-            $data['to'],
-            $data['analyticCode']
-        );
+        try {
+            $trip = $tripService->createTrip(
+                $data['from'],
+                $data['to'],
+                $data['analyticCode']
+            );
+        } catch (InvalidArgumentException $e) {
+            return $this->json(
+                ['error' => $e->getMessage()],
+                422
+            );
+        } catch (\Throwable $e) {
+            return $this->json(
+                ['error' => 'Internal error: ' . $e->getMessage()],
+                500
+            );
+        }
 
         return $this->json($trip->toArray(), 201);
     }
@@ -35,16 +48,10 @@ class TripController extends AbstractController
     public function list(TripService $tripService): JsonResponse
     {
         $trips = array_map(
-            fn($trip) => $trip->toArray(),
+            fn ($trip) => $trip->toArray(),
             $tripService->getTrips()
         );
 
         return $this->json($trips);
-    }
-
-    #[Route('/stats/analytic-codes', name: 'stats_analytic_codes', methods: ['GET'])]
-    public function stats(TripService $tripService): JsonResponse
-    {
-        return $this->json($tripService->getStatsByAnalyticCode());
     }
 }
