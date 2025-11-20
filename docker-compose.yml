@@ -12,3 +12,20 @@ services:
       - "5173:80"
     depends_on:
       - backend
+
+  db:
+   image: mariadb:11
+   container_name: mob-mariadb
+   restart: unless-stopped
+   environment:
+     MARIADB_ROOT_PASSWORD: rootpassword
+     MARIADB_DATABASE: mob_db
+     MARIADB_USER: mob_user
+     MARIADB_PASSWORD: mob_password
+   ports:
+     - "3307:3306"   # 3307 côté PC -> 3306 dans le container
+   volumes:
+     - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

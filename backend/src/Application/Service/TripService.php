@@ -2,35 +2,36 @@
 
 namespace App\Application\Service;
 
-use App\Domain\Model\Trip;
 use App\Domain\Service\RoutingService;
+use App\Entity\Trip;
+use App\Repository\TripRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 
 class TripService
 {
-    /**
-     * @var Trip[]
-     */
-    private array $trips = [];
-
     public function __construct(
-        private RoutingService $routingService
+        private RoutingService $routingService,
+        private EntityManagerInterface $em,
+        private TripRepository $tripRepository
     ) {}
 
-    /**
-     * Crée un trajet, calcule la distance et le garde en mémoire.
-     */
-    public function createTrip(string $fromCode, string $toCode, string $analyticCode): Trip
+    public function createTrip(string $from, string $to, string $analyticCode): Trip
     {
-        $distance = $this->routingService->calculateDistance($fromCode, $toCode);
+        $distance = $this->routingService->calculateDistance($from, $to);
 
-        $trip = new Trip(
-            strtoupper($fromCode),
-            strtoupper($toCode),
-            $analyticCode,
-            $distance
-        );
+        if ($distance <= 0) {
+            throw new InvalidArgumentException(sprintf(
+                'Impossible de calculer une distance positive entre %s et %s',
+                $from,
+                $to
+            ));
+        }
 
-        $this->trips[] = $trip;
+        $trip = new Trip($from, $to, $analyticCode, $distance);
+
+        $this->em->persist($trip);
+        $this->em->flush();
 
         return $trip;
     }
@@ -40,33 +41,14 @@ class TripService
      */
     public function getTrips(): array
     {
-        return $this->trips;
+        return $this->tripRepository->findBy([], ['createdAt' => 'DESC']);
     }
 
     /**
-     * Statistiques par code analytique.
-     *
-     * @return array<int, array{analyticCode:string,count:int,totalDistance:float}>
+     * @return array<int, array{analyticCode: string, count: int, totalDistance: float}>
      */
     public function getStatsByAnalyticCode(): array
     {
-        $stats = [];
-
-        foreach ($this->trips as $trip) {
-            $code = $trip->analyticCode;
-
-            if (!isset($stats[$code])) {
-                $stats[$code] = [
-                    'analyticCode' => $code,
-                    'count' => 0,
-                    'totalDistance' => 0.0,
-                ];
-            }
-
-            $stats[$code]['count']++;
-            $stats[$code]['totalDistance'] += $trip->distance;
-        }
-
-        return array_values($stats);
+        return $this->tripRepository->getStatsByAnalyticCode();
     }
 }
