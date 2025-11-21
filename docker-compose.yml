@@ -1,9 +1,16 @@
+
 services:
   backend:
     build: ./backend
     container_name: mob-backend
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - ./backend/.env
+    networks:
+      - mob-network
 
   frontend:
     build: ./frontend
@@ -12,20 +19,43 @@ services:
       - "5173:80"
     depends_on:
       - backend
+    networks:
+      - mob-network
 
   db:
-   image: mariadb:11
-   container_name: mob-mariadb
-   restart: unless-stopped
-   environment:
-     MARIADB_ROOT_PASSWORD: rootpassword
-     MARIADB_DATABASE: mob_db
-     MARIADB_USER: mob_user
-     MARIADB_PASSWORD: mob_password
-   ports:
-     - "3307:3306"   # 3307 côté PC -> 3306 dans le container
-   volumes:
-     - db_data:/var/lib/mysql
+    image: mariadb:11
+    container_name: mob-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: mob_db
+      MARIADB_USER: mob_user
+      MARIADB_PASSWORD: mob_password
+    ports:
+      - "3307:3306"   # 3307 côté PC -> 3306 dans le container
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - mob-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: mob-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: mob_user
+      PMA_PASSWORD: mob_password
+    ports:
+      - "8080:80"
+    networks:
+      - mob-network
 
 volumes:
   db_data:
+
+networks:
+  mob-network:
+    driver: bridge
