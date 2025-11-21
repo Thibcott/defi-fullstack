@@ -1,0 +1,109 @@
+1. Docker & MariaDB
+
+ Créer/compléter le docker-compose.yml :
+
+Backend (Node/Nest/Express)
+
+MariaDB
+
+phpMyAdmin (optionnel)
+
+ Ajouter les variables d’environnement (DB_HOST, DB_USER, DB_PASS, DB_NAME).
+
+ Vérifier le lancement de MariaDB + backend.
+
+ Ajouter un volume pour persister la base.
+
+🗄️ 2. Base de données
+
+ Créer la table trips (id, from, to, analyticCode, etc.).
+
+ Ajouter un script SQL d’initialisation dans /docker-entrypoint-initdb.d.
+
+ Vérifier que la table s'installe au boot de MariaDB.
+
+🔗 3. Connexion Backend ↔ MariaDB
+
+ Configurer l’ORM ou le driver SQL.
+
+ Tester la connexion au démarrage.
+
+ Ajouter des logs clairs en cas d'erreur.
+
+🚏 4. Routes API
+POST /trips
+
+ Debug l’erreur 500.
+
+ Valider les inputs.
+
+ Vérifier l’INSERT SQL.
+
+GET /trips
+
+ Retourner tous les trajets en JSON.
+
+DELETE /trips/:id
+
+ Implémenter la suppression.
+
+ Gérer le cas : id inexistant.
+
+🧪 5. Tests
+
+ Tester toutes les routes avec curl ou Postman.
+
+ Vérifier les statuts HTTP (200, 201, 400, 404).
+
+ Vérifier que la BDD se met à jour correctement.
+
+🧹 6. Linter & Formatage
+
+ Installer ESLint (config standard + règles recommandées).
+
+ Installer Prettier.
+
+ Ajouter un script "lint" dans package.json.
+
+ Configurer un hook Git pre-commit avec Husky pour :
+
+ Lancer ESLint avant chaque commit.
+
+ Lancer Prettier (format).
+
+🔄 7. CI/CD (GitHub Actions)
+CI :
+
+ Créer un workflow .github/workflows/ci.yml :
+
+ Installer Node.js
+
+ Installer les dépendances
+
+ Lancer ESLint
+
+ Lancer les tests
+
+ Vérifier que le projet build
+
+CD :
+
+ Ajouter un job pour build + lancer le backend dans un conteneur Docker.
+
+ Optionnel : push de l’image sur GitHub Container Registry.
+
+📄 8. Documentation
+
+ Ajouter un README complet :
+
+Installation
+
+Docker
+
+Routes API
+
+Exemple de requêtes
+
+Scripts npm
+
+CI/CD
