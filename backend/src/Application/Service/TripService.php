@@ -14,13 +14,15 @@ class TripService
         private RoutingService $routingService,
         private EntityManagerInterface $em,
         private TripRepository $tripRepository
-    ) {}
+    ) 
+    {}
 
     public function createTrip(string $from, string $to, string $analyticCode): Trip
     {
         $distance = $this->routingService->calculateDistance($from, $to);
 
-        if ($distance <= 0) {
+        if ($distance <= 0) 
+        {
             throw new InvalidArgumentException(sprintf(
                 'Impossible de calculer une distance positive entre %s et %s',
                 $from,
