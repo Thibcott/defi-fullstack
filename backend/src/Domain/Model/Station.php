@@ -8,8 +8,9 @@ class Station
         public int $id,
         public string $shortName,
         public string $longName
-    ) 
-    {}
+    ) {
+        
+    }
 
     public function toArray(): array
     {

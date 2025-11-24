@@ -10,8 +10,9 @@ class Trip
         public string $analyticCode,
         public float $distance,
         public \DateTimeImmutable $createdAt = new \DateTimeImmutable()
-    ) 
-    {}
+    ) {
+        
+    }
 
     public function toArray(): array
     {
