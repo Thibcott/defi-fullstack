@@ -21,8 +21,7 @@ class TripService
     {
         $distance = $this->routingService->calculateDistance($from, $to);
 
-        if ($distance <= 0) 
-        {
+        if ($distance <= 0) {
             throw new InvalidArgumentException(sprintf(
                 'Impossible de calculer une distance positive entre %s et %s',
                 $from,
