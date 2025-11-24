@@ -40,6 +40,12 @@ jobs:
       - name: Run PHPUnit tests with coverage
         run: ./vendor/bin/phpunit --coverage-text
 
+      - name: Run PHPStan
+        run: composer phpstan
+
+      - name: Run PHPCS
+        run: composer cs
+
   frontend:
     name: Frontend (tests + build)
     runs-on: ubuntu-latest
@@ -67,6 +73,10 @@ jobs:
 
       - name: Check build (optionnel mais utile)
         run: npm run build
+
+      - name: Run ESLint
+        run: npm run lint
+
 
   docker-build:
     name: Docker images build

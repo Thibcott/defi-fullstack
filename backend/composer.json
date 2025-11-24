@@ -63,7 +63,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "phpstan": "phpstan analyse src",
+        "cs": "phpcs src"
     },
     "conflict": {
         "symfony/symfony": "*"
