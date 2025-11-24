@@ -20,5 +20,5 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Infrastructure\Loader\StationsDataLoader:
         arguments:
-            $stationsFile: '%kernel.project_dir%/../stations.json'
-            $distancesFile: '%kernel.project_dir%/../distances.json'
+            $stationsFile: '%kernel.project_dir%/stations.json'
+            $distancesFile: '%kernel.project_dir%/distances.json'

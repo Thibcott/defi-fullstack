@@ -1,4 +1,4 @@
-# 🚄 Défi Fullstack -- MOB (Montreux--Oberland Bernois)
+o# 🚄 Défi Fullstack -- MOB (Montreux--Oberland Bernois)
 
 Ce projet implémente le défi technique proposé par le MOB :\
 ✔ un **backend PHP 8 / Symfony** exposant une API\
