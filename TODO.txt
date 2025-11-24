@@ -1,109 +1,50 @@
-1. Docker & MariaDB
+TODO 
+🔧 Backend (Symfony)
 
- Créer/compléter le docker-compose.yml :
+ Ajouter les migrations Doctrine et créer les tables dans PostgreSQL
 
-Backend (Node/Nest/Express)
+ Ajouter des tests PHPUnit (unitaires + fonctionnels)
 
-MariaDB
+ Générer un rapport de couverture (coverage)
 
-phpMyAdmin (optionnel)
+🌐 Frontend (Vue 3 + TS)
 
- Ajouter les variables d’environnement (DB_HOST, DB_USER, DB_PASS, DB_NAME).
+ Ajouter des tests frontend (Vitest)
 
- Vérifier le lancement de MariaDB + backend.
+ Vérifier la conformité de l’UI avec le besoin (création de trajet + stats)
 
- Ajouter un volume pour persister la base.
+ Améliorer l’affichage des erreurs + UX
 
-🗄️ 2. Base de données
+ Ajouter éventuellement un graphique pour les stats (bonus)
 
- Créer la table trips (id, from, to, analyticCode, etc.).
+🐳 Docker / Infra
 
- Ajouter un script SQL d’initialisation dans /docker-entrypoint-initdb.d.
+ Nettoyer le docker-compose final (backend / frontend / db)
 
- Vérifier que la table s'installe au boot de MariaDB.
+🔍 Qualité & Sécurité
 
-🔗 3. Connexion Backend ↔ MariaDB
+ Ajouter PHPCS + PHPStan pour le backend
 
- Configurer l’ORM ou le driver SQL.
+ Ajouter ESLint + Prettier pour le frontend
 
- Tester la connexion au démarrage.
+ Vérifier la gestion des secrets (pas en dur dans le code)
 
- Ajouter des logs clairs en cas d'erreur.
+🚀 CI/CD (mini)
 
-🚏 4. Routes API
-POST /trips
+ Créer un fichier YAML (GitHub Actions ou GitLab) avec :
 
- Debug l’erreur 500.
+ build backend + frontend
 
- Valider les inputs.
+ tests
 
- Vérifier l’INSERT SQL.
+ coverage
 
-GET /trips
+ lint
 
- Retourner tous les trajets en JSON.
+(Bonus) push images Docker dans un registry
 
-DELETE /trips/:id
+📄 Documentation
 
- Implémenter la suppression.
+ Finaliser le README (instructions de build + run)
 
- Gérer le cas : id inexistant.
-
-🧪 5. Tests
-
- Tester toutes les routes avec curl ou Postman.
-
- Vérifier les statuts HTTP (200, 201, 400, 404).
-
- Vérifier que la BDD se met à jour correctement.
-
-🧹 6. Linter & Formatage
-
- Installer ESLint (config standard + règles recommandées).
-
- Installer Prettier.
-
- Ajouter un script "lint" dans package.json.
-
- Configurer un hook Git pre-commit avec Husky pour :
-
- Lancer ESLint avant chaque commit.
-
- Lancer Prettier (format).
-
-🔄 7. CI/CD (GitHub Actions)
-CI :
-
- Créer un workflow .github/workflows/ci.yml :
-
- Installer Node.js
-
- Installer les dépendances
-
- Lancer ESLint
-
- Lancer les tests
-
- Vérifier que le projet build
-
-CD :
-
- Ajouter un job pour build + lancer le backend dans un conteneur Docker.
-
- Optionnel : push de l’image sur GitHub Container Registry.
-
-📄 8. Documentation
-
- Ajouter un README complet :
-
-Installation
-
-Docker
-
-Routes API
-
-Exemple de requêtes
-
-Scripts npm
-
-CI/CD
+ Documenter les choix techniques
