@@ -9,7 +9,6 @@ class Segment
         public string $toCode,
         public float $distance
     ) {
-        
     }
 
     public function toArray(): array

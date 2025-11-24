@@ -9,7 +9,6 @@ class Station
         public string $shortName,
         public string $longName
     ) {
-        
     }
 
     public function toArray(): array

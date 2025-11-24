@@ -11,7 +11,6 @@ class Trip
         public float $distance,
         public \DateTimeImmutable $createdAt = new \DateTimeImmutable()
     ) {
-        
     }
 
     public function toArray(): array

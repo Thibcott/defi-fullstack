@@ -15,7 +15,6 @@ class TripService
         private EntityManagerInterface $em,
         private TripRepository $tripRepository
     ) {
-        
     }
 
     public function createTrip(string $from, string $to, string $analyticCode): Trip
