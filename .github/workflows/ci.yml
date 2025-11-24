@@ -69,13 +69,13 @@ jobs:
         run: npm run build
 
   docker-build:
-  name: Docker images build
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Build backend image
-      run: docker build -t mob-backend ./backend
-    - name: Build frontend image
-      run: docker build -t mob-frontend ./frontend
+    name: Docker images build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker build -t mob-backend ./backend
+      - name: Build frontend image
+        run: docker build -t mob-frontend ./frontend
 
