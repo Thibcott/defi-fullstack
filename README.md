@@ -1,68 +1,106 @@
-o# 🚄 Défi Fullstack -- MOB (Montreux--Oberland Bernois)
+# 🚄 Défi Fullstack – Solution Simple
 
-Ce projet implémente le défi technique proposé par le MOB :\
-✔ un **backend PHP 8 / Symfony** exposant une API\
-✔ un **frontend Vue 3 + TypeScript** consommant cette API\
-✔ calcul des distances entre deux stations\
-✔ création de trajets avec codes analytiques\
-✔ statistiques basées sur les trajets\
-✔ tests backend + frontend\
-✔ lancement simple en local (PHP / npm)\
-✔ compatible Docker (si Docker Desktop installé)
+Ce projet propose une petite application fullstack pour le défi MOB :
 
-## 🗂️ Architecture du projet
+* **Backend** : Symfony (API REST) + PHP 8
+* **Frontend** : Vue 3 + TypeScript
+* **Données** : fichiers `stations.json` & `distances.json`
+* **Fonctions** : créer des trajets, calculer des distances, afficher des statistiques
 
-    defi-fullstack/
-    │
-    ├── backend/          → Backend Symfony (API)
-    ├── frontend/         → Frontend Vue + TypeScript
-    ├── stations.json     → Liste des stations
-    ├── distances.json    → Distances entre stations
-    └── README.md
+---
 
-# 🔧 Backend -- Symfony (PHP 8)
+## 🚀 Lancer le projet avec Docker (recommandé)
 
-Endpoints : - `GET /stations` - `GET /distance?from=MX&to=CGE` -
-`POST /trips` - `GET /trips` - `GET /stats/analytic-codes`
+Depuis la racine du projet :
 
-## Lancer le backend
+```bash
+docker compose up --build
+```
 
-    cd backend
-    composer install
-    php -S localhost:8000 -t public
+Cela démarre :
 
-## Tests backend
+* le **backend** sur [http://localhost:8000](http://localhost:8000)
+* le **frontend** sur [http://localhost:5173](http://localhost:5173)
+* la **base PostgreSQL** automatiquement
 
-    cd backend
-    ./vendor/bin/phpunit
+Aucune configuration supplémentaire n’est nécessaire.
 
-# 🌐 Frontend -- Vue 3 + TypeScript
+---
 
-## Lancer le frontend
+## 🧩 Structure du projet
 
-    cd frontend
-    npm install
-    npm run dev
+```
+defi-fullstack/
+ ├── backend/      → API Symfony
+ ├── frontend/     → Application Vue 3
+ ├── stations.json
+ ├── distances.json
+ └── docker-compose.yml
+```
 
-Accessible sur : http://localhost:5173
+---
 
-## Tests frontend
+## 🔌 Endpoints utiles
 
-    cd frontend
-    npm run test
+| Méthode | URL                     | Description               |
+| ------- | ----------------------- | ------------------------- |
+| POST    | `/trips`                | Créer un trajet           |
+| GET     | `/stats/analytic-codes` | Stats par code analytique |
 
-# 🧠 Fonctionnement
+---
 
--   Données chargées depuis `stations.json` et `distances.json`
--   Calcul du plus court chemin (Dijkstra)
--   Trajets stockés en mémoire
--   Stats par code analytique
+## 🛠️ Lancer sans Docker
 
-# 🐳 Docker (optionnel)
+### Backend
 
-    docker compose up -d
+```bash
+cd backend
+composer install
+php -S localhost:8000 -t public
+```
 
-# 🔚 Conclusion
+### Frontend
 
-Solution fullstack complète, testée, simple à lancer et adaptée au
-besoin du défi.
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 📦 Données utilisées
+
+* **stations.json** : liste des gares MOB
+* **distances.json** : distances entre gares pour le calcul
+
+Le calcul utilise l’algorithme du **plus court chemin (Dijkstra)**.
+
+---
+
+## 📄 Tests
+
+### Backend
+
+```bash
+cd backend
+./vendor/bin/phpunit
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm run test
+```
+
+---
+
+## 🎯 Objectif du défi
+
+Fournir une solution simple et fonctionnelle permettant :
+
+* la création de trajets
+* le calcul automatique des distances
+* l’obtention de statistiques
+* une interface claire et réactive
