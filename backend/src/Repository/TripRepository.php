@@ -16,10 +16,10 @@ class TripRepository extends ServiceEntityRepository
     /**
      * Retourne les stats par code analytique :
      *  - analyticCode
-     *  - count
-     *  - totalDistance
+     *  - tripCount
+     *  - totalDistanceKm
      *
-     * @return array<int, array{analyticCode: string, count: int, totalDistance: float}>
+     * @return array<int, array{analyticCode: string, tripCount: int, totalDistanceKm: float}>
      */
     public function getStatsByAnalyticCode(): array
     {
@@ -32,9 +32,16 @@ class TripRepository extends ServiceEntityRepository
         return array_map(static function (array $row): array {
             return [
                 'analyticCode' => $row['analyticCode'],
-                'count' => (int) $row['count'],
-                'totalDistance' => (float) $row['totalDistance'],
+                'tripCount' => (int) $row['count'],
+                'totalDistanceKm' => (float) $row['totalDistance'],
             ];
         }, $qb->getQuery()->getArrayResult());
+    }
+
+    public function save(Trip $trip): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist($trip);
+        $em->flush();
     }
 }

@@ -39,4 +39,14 @@ class RoutingServiceTest extends TestCase
         // MX -> CGE (0.65) + CGE -> VUAR (0.35) = 1.0
         $this->assertEquals(1.0, $distance, '', 0.0001);
     }
+
+    public function testCalculateRouteReturnsPath(): void
+    {
+        $service = $this->createRoutingService();
+
+        $route = $service->calculateRoute('MX', 'VUAR');
+
+        $this->assertSame(['MX', 'CGE', 'VUAR'], $route['path']);
+        $this->assertEquals(1.0, $route['distance'], '', 0.0001);
+    }
 }

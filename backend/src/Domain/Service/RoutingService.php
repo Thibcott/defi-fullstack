@@ -25,12 +25,7 @@ class RoutingService
     }
 
     /**
-     * Construit le graphe à partir des segments.
-     *
-     * On considère que les distances sont bidirectionnelles :
-     * MX -> CGE et CGE -> MX ont la même distance.
-     *
-     * @param array $segments
+     * Construit le graphe a partir des segments (distances bidirectionnelles).
      */
     private function buildGraph(array $segments): void
     {
@@ -60,36 +55,41 @@ class RoutingService
      */
     public function calculateDistance(string $fromCode, string $toCode): float
     {
+        return $this->calculateRoute($fromCode, $toCode)['distance'];
+    }
+
+    /**
+     * Retourne distance et chemin le plus court entre deux stations.
+     *
+     * @return array{distance: float, path: string[]}
+     */
+    public function calculateRoute(string $fromCode, string $toCode): array
+    {
         $fromCode = strtoupper($fromCode);
         $toCode = strtoupper($toCode);
 
         if (!isset($this->graph[$fromCode])) {
-            throw new InvalidArgumentException(sprintf('Station de départ inconnue: %s', $fromCode));
+            throw new InvalidArgumentException(sprintf('Station de depart inconnue: %s', $fromCode));
         }
 
         if (!isset($this->graph[$toCode])) {
-            throw new InvalidArgumentException(sprintf('Station d\'arrivée inconnue: %s', $toCode));
+            throw new InvalidArgumentException(sprintf('Station d\'arrivee inconnue: %s', $toCode));
         }
 
         if ($fromCode === $toCode) {
-            return 0.0;
+            return ['distance' => 0.0, 'path' => [$fromCode]];
         }
 
-        // Dijkstra
-
-        // Distances minimales connues depuis $fromCode
         $distances = [];
-        // Ensemble des nœuds déjà "finalisés"
+        $previous = [];
         $visited = [];
 
-        // Initialisation
         foreach ($this->graph as $node => $_) {
             $distances[$node] = INF;
         }
         $distances[$fromCode] = 0.0;
 
         while (true) {
-            // 1. Trouver le nœud non visité avec la distance minimale
             $current = null;
             $currentDistance = INF;
 
@@ -103,19 +103,16 @@ class RoutingService
                 }
             }
 
-            // Plus de nœuds atteignables
             if ($current === null) {
                 break;
             }
 
-            // Si on a atteint la destination, on peut s'arrêter
             if ($current === $toCode) {
                 break;
             }
 
             $visited[$current] = true;
 
-            // 2. Mettre à jour les voisins
             foreach ($this->graph[$current] as $neighbor => $edgeDistance) {
                 if (isset($visited[$neighbor])) {
                     continue;
@@ -125,18 +122,47 @@ class RoutingService
 
                 if ($newDistance < $distances[$neighbor]) {
                     $distances[$neighbor] = $newDistance;
+                    $previous[$neighbor] = $current;
                 }
             }
         }
 
         if ($distances[$toCode] === INF) {
             throw new InvalidArgumentException(sprintf(
-                'Aucun chemin trouvé entre %s et %s',
+                'Aucun chemin trouve entre %s et %s',
                 $fromCode,
                 $toCode
             ));
         }
 
-        return $distances[$toCode];
+        $path = $this->reconstructPath($previous, $fromCode, $toCode);
+
+        return [
+            'distance' => $distances[$toCode],
+            'path' => $path,
+        ];
+    }
+
+    /**
+     * Reconstitue le chemin le plus court depuis les precedents trouves par Dijkstra.
+     *
+     * @param array<string, string> $previous
+     * @return string[]
+     */
+    private function reconstructPath(array $previous, string $fromCode, string $toCode): array
+    {
+        $path = [$toCode];
+        $current = $toCode;
+
+        while (isset($previous[$current])) {
+            $current = $previous[$current];
+            $path[] = $current;
+
+            if ($current === $fromCode) {
+                break;
+            }
+        }
+
+        return array_reverse($path);
     }
 }

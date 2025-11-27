@@ -23,6 +23,8 @@
         "doctrine/doctrine-fixtures-bundle": "^4.3",
         "phpstan/phpstan": "*",
         "phpunit/phpunit": "^11.5",
+        "symfony/browser-kit": "^7.3",
+        "symfony/http-client": "^7.3",
         "squizlabs/php_codesniffer": "*",
         "symfony/maker-bundle": "^1.64"
     },

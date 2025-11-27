@@ -19,13 +19,24 @@ final class Version20251120100712 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE trip (id INT AUTO_INCREMENT NOT NULL, from_station_id VARCHAR(10) NOT NULL, to_station_id VARCHAR(10) NOT NULL, analytic_code VARCHAR(50) NOT NULL, distance_km DOUBLE PRECISION NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
+        if ($schema->hasTable('trip')) {
+            return;
+        }
+
+        $table = $schema->createTable('trip');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('from_station_id', 'string', ['length' => 10]);
+        $table->addColumn('to_station_id', 'string', ['length' => 10]);
+        $table->addColumn('analytic_code', 'string', ['length' => 50]);
+        $table->addColumn('distance_km', 'float');
+        $table->addColumn('created_at', 'datetime_immutable');
+        $table->setPrimaryKey(['id']);
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE trip');
+        if ($schema->hasTable('trip')) {
+            $schema->dropTable('trip');
+        }
     }
 }

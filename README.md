@@ -1,58 +1,30 @@
-# 🚄 Défi Fullstack – Solution Simple
+# MOB - Defi Fullstack
 
-Ce projet propose une petite application fullstack pour le défi MOB :
+Application fullstack qui expose l'API `/api/v1` (Symfony/PHP) et une interface Vue 3/TypeScript pour calculer des trajets et consulter des statistiques analytiques.
 
-* **Backend** : Symfony (API REST) + PHP 8
-* **Frontend** : Vue 3 + TypeScript
-* **Données** : fichiers `stations.json` & `distances.json`
-* **Fonctions** : créer des trajets, calculer des distances, afficher des statistiques
-
----
-
-## 🚀 Lancer le projet avec Docker (recommandé)
-
-Depuis la racine du projet :
+## Demarrer avec Docker
 
 ```bash
 docker compose up --build
 ```
 
-Cela démarre :
+- Backend : http://localhost:8000
+- Frontend : http://localhost:5173
+- Base PostgreSQL : mot de passe a definir dans `backend/.env.local` via `DATABASE_PASSWORD` (non versionne). Les migrations sont executees automatiquement au demarrage du conteneur backend.
 
-* le **backend** sur [http://localhost:8000](http://localhost:8000)
-* le **frontend** sur [http://localhost:5173](http://localhost:5173)
-* la **base PostgreSQL** automatiquement
+## API (extrait)
 
-Aucune configuration supplémentaire n’est nécessaire.
+| Methode | URL             | Description                               |
+| ------- | --------------- | ----------------------------------------- |
+| POST    | `/api/v1/routes`| Calcul et enregistrement d'un trajet      |
+| GET     | `/api/v1/routes`| Liste des trajets enregistres             |
+| GET     | `/api/v1/stats` | Statistiques par code analytique          |
 
----
+La specification complete est dans `openapi.yml`.
 
-## 🧩 Structure du projet
-
-```
-defi-fullstack/
- ├── backend/      → API Symfony
- ├── frontend/     → Application Vue 3
- ├── stations.json
- ├── distances.json
- └── docker-compose.yml
-```
-
----
-
-## 🔌 Endpoints utiles
-
-| Méthode | URL                     | Description               |
-| ------- | ----------------------- | ------------------------- |
-| POST    | `/trips`                | Créer un trajet           |
-| GET     | `/stats/analytic-codes` | Stats par code analytique |
-
----
-
-## 🛠️ Lancer sans Docker
+## Lancer sans Docker
 
 ### Backend
-
 ```bash
 cd backend
 composer install
@@ -60,47 +32,19 @@ php -S localhost:8000 -t public
 ```
 
 ### Frontend
-
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
----
+## Tests
 
-## 📦 Données utilisées
+- Backend : `cd backend && ./vendor/bin/phpunit`
+- Frontend : `cd frontend && npm run test`
 
-* **stations.json** : liste des gares MOB
-* **distances.json** : distances entre gares pour le calcul
+## Notes de securite / DevSecOps
 
-Le calcul utilise l’algorithme du **plus court chemin (Dijkstra)**.
-
----
-
-## 📄 Tests
-
-### Backend
-
-```bash
-cd backend
-./vendor/bin/phpunit
-```
-
-### Frontend
-
-```bash
-cd frontend
-npm run test
-```
-
----
-
-## 🎯 Objectif du défi
-
-Fournir une solution simple et fonctionnelle permettant :
-
-* la création de trajets
-* le calcul automatique des distances
-* l’obtention de statistiques
-* une interface claire et réactive
+- Aucune donnee secrete n'est versionnee : renseigner `DATABASE_PASSWORD` dans `backend/.env.local`.
+- Les migrations Doctrine sont appliquees automatiquement via la commande de demarrage du conteneur backend.
+- Le proxy Nginx (frontend) reste pret pour etre configure en HTTPS ; ajouter un certificat cote reverse proxy si necessaire.

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Application\Dto\RouteRequest;
 use App\Application\Service\TripService;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,27 +12,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TripController extends AbstractController
 {
-    #[Route('/trips', name: 'trips_create', methods: ['POST'])]
+    #[Route('/routes', name: 'routes_create', methods: ['POST'])]
     public function create(Request $request, TripService $tripService): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $raw = $request->getContent() ?: '';
+        error_log('POST /api/v1/routes raw payload: ' . $raw);
+        $data = json_decode($raw, true);
 
-        if (!$data || !isset($data['from'], $data['to'], $data['analyticCode'])) {
-            return $this->json(
-                ['error' => 'Fields "from", "to" and "analyticCode" are required'],
-                400
-            );
+        // Fallback for form-data / x-www-form-urlencoded or empty JSON parsing
+        if (!is_array($data) || $data === []) {
+            $data = $request->request->all();
         }
 
         try {
-            $trip = $tripService->createTrip(
-                $data['from'],
-                $data['to'],
-                $data['analyticCode']
-            );
+            $routeRequest = RouteRequest::fromArray($data);
+            $result = $tripService->createTrip($routeRequest);
         } catch (InvalidArgumentException $e) {
             return $this->json(
-                ['error' => $e->getMessage()],
+                ['error' => $e->getMessage(), 'raw' => $raw, 'data' => $data],
                 422
             );
         } catch (\Throwable $e) {
@@ -41,10 +39,13 @@ class TripController extends AbstractController
             );
         }
 
-        return $this->json($trip->toArray(), 201);
+        return $this->json(
+            array_merge($result['trip']->toArray(), ['path' => $result['path']]),
+            201
+        );
     }
 
-    #[Route('/trips', name: 'trips_list', methods: ['GET'])]
+    #[Route('/routes', name: 'routes_list', methods: ['GET'])]
     public function list(TripService $tripService): JsonResponse
     {
         $trips = array_map(

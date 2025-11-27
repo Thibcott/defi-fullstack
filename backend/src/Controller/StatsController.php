@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StatsController extends AbstractController
 {
-    #[Route('/stats/analytic-codes', name: 'stats_analytic_codes', methods: ['GET'])]
+    #[Route('/stats', name: 'stats_analytic_codes', methods: ['GET'])]
     public function statsByAnalyticCode(TripService $tripService): JsonResponse
     {
         $stats = $tripService->getStatsByAnalyticCode();

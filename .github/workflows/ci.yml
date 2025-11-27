@@ -37,6 +37,13 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: Run migrations on sqlite (test env)
+        env:
+          APP_ENV: test
+        run: |
+          mkdir -p var
+          php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+
       - name: Run PHPUnit tests with coverage
         run: ./vendor/bin/phpunit --coverage-text
 

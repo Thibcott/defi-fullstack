@@ -75,10 +75,10 @@ class Trip
     {
         return [
             'id' => $this->id,
-            'from' => $this->fromStationId,
-            'to' => $this->toStationId,
+            'fromStationId' => $this->fromStationId,
+            'toStationId' => $this->toStationId,
             'analyticCode' => $this->analyticCode,
-            'distance' => $this->distanceKm,
+            'distanceKm' => $this->distanceKm,
             'createdAt' => $this->createdAt->format(DATE_ATOM),
         ];
     }
