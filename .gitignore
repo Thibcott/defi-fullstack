@@ -2,6 +2,6 @@
 .env
 .env.test
 .env.dev
-backend/.env
-backend/.env.test
+./backend/.env
+./backend/.env.test
 ./node_modules/

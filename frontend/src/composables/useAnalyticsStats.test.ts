@@ -9,8 +9,7 @@ describe('useAnalyticsStats', () => {
     if (originalFetch) {
       globalThis.fetch = originalFetch;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (globalThis as any).fetch;
+      Reflect.deleteProperty(globalThis, 'fetch');
     }
   });
 
@@ -37,14 +36,11 @@ describe('useAnalyticsStats', () => {
   });
 
   it('captures API errors', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        json: async () => ({ error: 'Server boom' }),
-      }),
-    );
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({ error: 'Server boom' }),
+    }));
 
     const composable = useAnalyticsStats();
     await composable.refresh();

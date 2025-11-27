@@ -9,8 +9,7 @@ describe('useRouteCreation', () => {
     if (originalFetch) {
       globalThis.fetch = originalFetch;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (globalThis as any).fetch;
+      Reflect.deleteProperty(globalThis, 'fetch');
     }
   });
 
@@ -43,14 +42,11 @@ describe('useRouteCreation', () => {
   });
 
   it('exposes the backend error message', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        ok: false,
-        status: 422,
-        json: async () => ({ error: 'Invalid data' }),
-      }),
-    );
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: false,
+      status: 422,
+      json: async () => ({ error: 'Invalid data' }),
+    }));
 
     const { submit, error } = useRouteCreation();
 
